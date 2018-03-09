@@ -3,13 +3,31 @@ const _genid = require('./lib/genid');
 let _dbname = null;
 let _table = null;
 
+// delete expired session
+function cleanupExpired(maxAge){
+    // retrieve connection scope
+    return _db.getConnection(_dbname, async function(db){
+
+        // run query - add maxAge in seconds
+        const [rows] = await db.query('DELETE FROM ?? WHERE `modified` > FROM_UNIXTIME(UNIX_TIMESTAMP() - ?);', [_table, maxAge/1000]);
+
+        // invalid ?
+        if (rows.length === 0){
+            return null;
+        }
+
+        // de-serialize
+        return JSON.parse(rows[0].payload);
+    });
+}
+
 // fetch
 function retrieveSession(key, maxAge){
     // retrieve connection scope
     return _db.getConnection(_dbname, async function(db){
 
         // run query - add maxAge in seconds
-        const [rows] = await db.query('SELECT `payload` FROM ?? WHERE `session_id` = ? AND `created` > FROM_UNIXTIME(UNIX_TIMESTAMP() - ?) LIMIT 1;', [_table, key, maxAge/1000]);
+        const [rows] = await db.query('SELECT `payload` FROM ?? WHERE `session_id` = ? AND `modified` > FROM_UNIXTIME(UNIX_TIMESTAMP() - ?) LIMIT 1;', [_table, key, maxAge/1000]);
 
         // invalid ?
         if (rows.length === 0){
@@ -64,5 +82,6 @@ module.exports = {
     get: retrieveSession,
     set: storeSession,
     destroy: destroySession,
+    cleanup: cleanupExpired,
     genid: _genid
 }
