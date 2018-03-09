@@ -1,0 +1,39 @@
+{
+    "name": "koa-session-mysql",
+    "description": "mysql/mariadb session store for koa-session",
+    "version": "0.1.0",
+    "author": "Andi Dittrich",
+    "keywords": [
+        "koa",
+        "koa2",
+        "session",
+        "store",
+        "middleware",
+        "mysql",
+        "mariadb",
+        "async",
+        "es2017"
+    ],
+    "files": [
+        "koa-session-mysql.js",
+        "lib/"
+    ],
+    "main": "./koa-session-mysql.js",
+    "bin": {},
+    "engines": {
+        "node": ">=8"
+    },
+    "scripts": {
+        "test": "eslint lib/**.js; mocha"
+    },
+    "dependencies": {
+        "koa-session": "^5.8.1",
+        "mysql-magic": "^0.3.0"
+    },
+    "devDependencies": {
+        "eslint": "^4.15.0",
+        "eslint-config-aenondynamics": "^0.2.0",
+        "koa": "^2.5.0",
+        "mocha": "^5.0.0"
+    }
+}
